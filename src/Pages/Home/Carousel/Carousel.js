@@ -3,6 +3,7 @@ import React from 'react';
 const Carousel = () => {
    return (
       <div className="carousel w-full">
+        
       <div id="slide1" className="carousel-item relative w-full">
         <img src="https://i.ibb.co/hV1ncg2/car4-1.png" alt='carousel' className="w-full" />
         <div className="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
@@ -37,3 +38,8 @@ const Carousel = () => {
 
 export default Carousel;
 
+
+// <img src="https://i.ibb.co/hV1ncg2/car4-1.png" alt="car4-1" border="0">
+// <img src="https://i.ibb.co/CWFyhZ1/car3-1.png" alt="car3-1" border="0">
+// <img src="https://i.ibb.co/dgBDVJJ/car2-1.png" alt="car2-1" border="0">
+// <img src="https://i.ibb.co/1Mzfsbv/car1-1.png" alt="car1-1" border="0"></img>
