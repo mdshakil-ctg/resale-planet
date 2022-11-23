@@ -3,10 +3,12 @@ import { RouterProvider } from 'react-router-dom';
 import { router } from './Routes/Router';
 
 
-function App() {
+function App({children}) {
   return (
     <div className="App">
-      <RouterProvider router={router}></RouterProvider>
+      <RouterProvider router={router}>
+        {children}
+      </RouterProvider>
     </div>
   );
 }
