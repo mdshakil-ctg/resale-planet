@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../../../../Context/UserContext";
 
 const CatagoryCard = ({catagory}) => {
+  const {createUser} = useContext(AuthContext)
+  console.log(createUser)
+
    const {title, img_url, description, catagory_id} = catagory;
   return (
    <div className="card w-96 glass">
