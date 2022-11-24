@@ -3,8 +3,7 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../../../../Context/UserContext";
 
 const CatagoryCard = ({catagory}) => {
-  const {createUser} = useContext(AuthContext)
-  console.log(createUser)
+  
 
    const {title, img_url, description, catagory_id} = catagory;
   return (

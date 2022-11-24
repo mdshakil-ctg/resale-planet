@@ -1,9 +1,7 @@
-import React, { useContext } from "react";
-import  { AuthContext } from "../../../Context/UserContext";
+import React from "react";
 
 const About = () => {
-  const {createUser} = useContext(AuthContext)
-  console.log(createUser)
+ 
   return (
     <div>
       <h2 className="text-3xl font-semibold text-center mt-12">How Resale Planet Works</h2>
