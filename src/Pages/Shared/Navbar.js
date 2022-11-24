@@ -6,8 +6,8 @@ import { AuthContext } from '../../Context/UserContext';
 const Navbar = () => {
   const {user, logOut} =useContext(AuthContext);
   const navigate = useNavigate();
-  // console.log(user)
-
+  console.log(user)
+  
   const handleLogout = () =>{
     logOut()
     .then(result => {
@@ -26,7 +26,9 @@ const Navbar = () => {
         <li><Link to='/'>Home</Link></li>
         <li><Link to='/services'>Services</Link></li>
         <li><Link to='/blogs'>Blogs</Link></li>
-        <li><Link to='/reviews'>My Reviews</Link></li>
+        {
+          user?.uid && <li><Link to='/dashboard'>Dashboard</Link></li>
+        }
       </ul>
     </div>
    
@@ -37,7 +39,9 @@ const Navbar = () => {
       <li><Link to='/'>Home</Link></li>
       <li><Link to='/services'>Services</Link></li>
       <li><Link to='/blogs'>Blogs</Link></li>
-      <li><Link to='/reviews'>My Reviews</Link></li>
+      {
+          user?.uid && <li><Link to='/dashboard'>Dashboard</Link></li>
+        }
 
       {
         user?.uid ? <>
@@ -54,6 +58,22 @@ const Navbar = () => {
        user?.photoURL ? <img className='rounded-lg' src={user?.photoURL} style={{width:'30px'}} alt=''/>: <Link to='/blogs' className='text-decoration-none text-white'>  <UserCircleIcon className="h-6 w-6 mx-auto text-blue-500"/></Link>
    }
     </div>
+    <label htmlFor="dashboard-drawer" tabIndex={1} className="btn btn-ghost flex justify-end lg:hidden">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M4 6h16M4 12h8m-8 6h16"
+              />
+            </svg>
+          </label>
   </div>
 </div>
    );

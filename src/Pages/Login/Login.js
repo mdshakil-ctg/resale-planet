@@ -1,4 +1,5 @@
 import React, { useContext, useState } from 'react';
+import toast from 'react-hot-toast';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../Context/UserContext';
 
@@ -49,11 +50,30 @@ const Login = () => {
       
     }
 
+    const saveUserData = (name, email, role) => {
+      const user = { name, email , role};
+      fetch("http://localhost:5000/users", {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(user),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          // setUserEmail(email);
+        })
+        .catch((err) => console.log(err));
+    };
+
     const googleSignIn = () =>{
       loginWithGoogle()
       
       .then(result=>{
         const user = result.user;
+        const role = 'Buyer'
+      saveUserData(user?.displayName, user?.email, role)
+      toast('Sign Up Succesfull')
 
         const currentUser = {
           email: user.email

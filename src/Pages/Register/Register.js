@@ -57,6 +57,7 @@ const Register = () => {
       .then((res) => res.json())
       .then((data) => {
         setUserEmail(email);
+        navigate('/')
       })
       .catch((err) => console.log(err));
   };
@@ -69,6 +70,7 @@ const Register = () => {
       const role = 'Buyer'
       saveUserData(user?.displayName, user?.email, role)
       toast('Sign Up Succesfull')
+      navigate('/')
     })
     .catch(err => console.log(err))
   };

@@ -1,101 +1,74 @@
-import React, { useContext, useState } from "react";
-import toast from "react-hot-toast";
-import { AuthContext } from "../../../../Context/UserContext";
+import React, { useContext, useState } from 'react';
+import toast from 'react-hot-toast';
+import { AuthContext } from '../../../../Context/UserContext';
 
-const ShowCatagory = ({ catagory, setModalData }) => {
+const BookingModal = ({modalData, setModalData}) => {
+   const {
+      name,
+      img_url,
+      location,
+      price,
+      original_price,
+      used_duration,
+      post_time,
+      seller_name,
+      veryfied_seller,
+    } = modalData;
+   
+   const {user} = useContext(AuthContext);
+
+   const date = new Date()
+  const time = date.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
+  const current_date =date.getFullYear()+"-"+(date.getMonth()+1)+"-"+ date.getDate();
+  const bookingDate = time + " " + current_date;
+
+   const handleBooking = (event) => {
+      event.preventDefault();
+      const form = event.target;
+      const phone = form.phone.value;
+      
+      const bookingData = {
+        userName: user?.displayName,
+        email: user?.email,
+        phone,
+        carModel: name,
+        img_url,
+        location,
+        price,
+        original_price,
+        used_duration,
+        bookingDate
+      };
+      console.log(bookingData);
+      fetch("http://localhost:5000/bookings", {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(bookingData),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          if (data.acknowledged) {
+            toast("Booking Added on this date");
+            setModalData(null);
+            // refetch();
+          } else {
+           
+          }
+        })
+        .catch((err) => console.error(err));
   
-  const { user } = useContext(AuthContext);
-  console.log(user);
-  const {
-    name,
-    img_url,
-    location,
-    price,
-    original_price,
-    used_duration,
-    post_time,
-    seller_name,
-    veryfied_seller,
-  } = catagory;
+      form.reset();
+    };
 
-  // const date = new Date()
-  // const time = date.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
-  // const current_date =date.getFullYear()+"-"+(date.getMonth()+1)+"-"+ date.getDate();
-  // const bookingDate = time + " " + current_date;
+   return (
+      <>
+      <div>
+          {/* The button to open modal */}
 
-
-
-  
-  // const handleBooking = (event) => {
-  //   event.preventDefault();
-  //   const form = event.target;
-  //   const phone = form.phone.value;
-    
-  //   const bookingData = {
-  //     userName: user?.displayName,
-  //     email: user?.email,
-  //     phone,
-  //     carModel: name,
-  //     img_url,
-  //     location,
-  //     price,
-  //     original_price,
-  //     used_duration,
-  //     bookingDate
-  //   };
-  //   console.log(bookingData);
-  //   fetch("http://localhost:5000/bookings", {
-  //     method: "POST",
-  //     headers: {
-  //       "content-type": "application/json",
-  //     },
-  //     body: JSON.stringify(bookingData),
-  //   })
-  //     .then((res) => res.json())
-  //     .then((data) => {
-  //       console.log(data);
-  //       if (data.acknowledged) {
-  //         toast("Booking Added on this date");
-  //         // refetch();
-  //       } else {
-         
-  //       }
-  //     })
-  //     .catch((err) => console.error(err));
-
-  //   form.reset();
-  // };
-  return (
-    <div className="card glass mx-10 my-20">
-      <figure>
-        <img src={img_url} alt="car!" />
-      </figure>
-      <div className="card-body">
-        <h2 className="card-title">{name}</h2>
-
-        <p>Price : ${price}</p>
-        <p>Original Price : ${original_price}</p>
-        <p>Used : {used_duration} Month</p>
-        <p>Posted At: {post_time}</p>
-        <p>Location : {location}</p>
-        <p>Seller : {seller_name}</p>
-        {veryfied_seller !== "true" ? (
-          <input type="checkbox" className="checkbox" disabled checked />
-        ) : (
-          <>
-            <input
-              type="checkbox"
-              checked
-              className="checkbox checkbox-success"
-            />
-            <label onClick={()=>setModalData(catagory)} htmlFor="booking-modal" className="btn">
-              Book Now
-            </label>
-          </>
-        )}
-
-        {/* <div>
-        
+          {/* Put this part before </body> tag */}
           <input type="checkbox" id="booking-modal" className="modal-toggle" />
           <label htmlFor="booking-modal" className="modal cursor-pointer">
             <label className="modal-box relative" htmlFor="">
@@ -169,22 +142,18 @@ const ShowCatagory = ({ catagory, setModalData }) => {
                   id=""
                 />
                 </label>
-
-
+            
                 <input
                   type="submit"
-                  value="submit"
+                  value="Book Now"
                   className="btn btn-primary w-full"
                 />
               </form>
             </label>
           </label>
-        </div> */}
-
-        <div className="card-actions justify-end"></div>
-      </div>
-    </div>
-  );
+        </div>
+      </>
+   );
 };
 
-export default ShowCatagory;
+export default BookingModal;
