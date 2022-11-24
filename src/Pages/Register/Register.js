@@ -12,25 +12,27 @@ const Register = () => {
     formState: { errors },
     handleSubmit,
   } = useForm();
-  const { createUser, updateUser } = useContext(AuthContext);
+  const { createUser, updateUser, loginWithGoogle } = useContext(AuthContext);
   const [registerError, setRegisterError] = useState("");
-  const [userEmail, setUserEmail] = useState('');
+  const [userEmail, setUserEmail] = useState("");
   const navigate = useNavigate();
-//   const [token] = UseToken(userEmail)
+  //   const [token] = UseToken(userEmail)
 
-//   if(token){
-//     navigate('/')
-//   }
+  //   if(token){
+  //     navigate('/')
+  //   }
   const handleSignUp = (data) => {
+  
     createUser(data.email, data.password)
       .then((result) => {
         const userInfo = {
           displayName: data.name,
+          role: data.role
         };
         updateUser(userInfo)
           .then((result) => {
             // console.log(result)
-            saveUserData(data.name, data.email);
+            saveUserData(data.name, data.email, data.role);
           })
           .catch((err) => {
             console.log(err);
@@ -42,9 +44,9 @@ const Register = () => {
         setRegisterError(err.message);
       });
   };
-
-  const saveUserData = (name, email) => {
-    const user = { name, email };
+  
+  const saveUserData = (name, email, role) => {
+    const user = { name, email , role};
     fetch("http://localhost:5000/users", {
       method: "POST",
       headers: {
@@ -52,15 +54,25 @@ const Register = () => {
       },
       body: JSON.stringify(user),
     })
-    .then(res =>res.json())
-    .then(data => {
-      setUserEmail(email)
-    }
-    )
+      .then((res) => res.json())
+      .then((data) => {
+        setUserEmail(email);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const handleGoogleLogin = () => {
+    loginWithGoogle()
+    .then(result => {
+      const user = result.user;
+      console.log(user)
+      const role = 'Buyer'
+      saveUserData(user?.displayName, user?.email, role)
+      toast('Sign Up Succesfull')
+    })
     .catch(err => console.log(err))
   };
 
- 
   return (
     <form
       className="mt-24 flex flex-col justify-center items-center"
@@ -116,20 +128,36 @@ const Register = () => {
         {errors.password && (
           <span className="text-red-500">{errors.password.message}</span>
         )}
-        <label className="label">
-          <span className="label-text-alt">Forget Password ?</span>
-        </label>
       </div>
-      <button type='submit' className="btn btn-secondary w-full max-w-xs my-5">Login</button>
-      <div>
+
+      <div className="form-control w-full max-w-xs">
+        <label className="label">
+          <span className="label-text">Select Role</span>
+        </label>
+        <select defaultValue={'buyer'}
+        {...register("role", {
+        })}
+        className="select input-bordered w-full max-w-xs">
+          <option selected>Buyer</option>
+          <option>Seller</option>
+        </select>
+        {errors.email && <span className="text-red-500">Email Required</span>}
+      </div>
+      <button type="submit" className="btn btn-secondary w-full max-w-xs my-5">
+        Create Account
+      </button>
+      <div className="form-control w-full max-w-xs">
         <p>
-          Already have an account?{" "}
-          <Link to="/login" className="text-secondary">
-            login your accout
+          Already have an account?
+          <Link to="/login" className="text-secondary block text-center">
+            login your account
           </Link>
         </p>
         <div className="divider max-w-xs ">OR</div>
-        <button className="btn btn-accent w-full max-w-xs">
+        <button
+          onClick={handleGoogleLogin}
+          className="btn btn-accent w-full max-w-xs"
+        >
           Continue With Google
         </button>
       </div>
