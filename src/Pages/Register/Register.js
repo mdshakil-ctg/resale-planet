@@ -1,97 +1,143 @@
-import React, { useContext } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { AuthContext } from '../../Context/UserContext';
-
+import React, { useContext } from "react";
+import { useForm } from "react-hook-form";
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import toast from "react-hot-toast";
+import { AuthContext } from "../../Context/UserContext";
+// import UseToken from "../../hook/UseToken";
 
 const Register = () => {
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm();
+  const { createUser, updateUser } = useContext(AuthContext);
+  const [registerError, setRegisterError] = useState("");
+  const [userEmail, setUserEmail] = useState('');
+  const navigate = useNavigate();
+//   const [token] = UseToken(userEmail)
 
-   const {createUser} = useContext(AuthContext)
-   const navigate = useNavigate();
-   const location = useLocation();
-   const from = location?.state?.from?.pathname || '/';
-   const handleRegister = (event) =>{
-     
-     event.preventDefault();
-      const form = event.target;
-      const name = form.name.value;
-      const photo = form.photo.value;
-      const email = form.email.value;
-      const password = form.password.value;
-      console.log(name,photo,email, password)
-
-      createUser(email, password)
-      .then(result=>{
-        const user = result.user;
-
-        const currentUser = {
-          email: user.email
-        }
-        fetch('http://localhost:5000/jwt', {
-          method: 'POST',
-          headers: {
-            'content-type': 'application/json'
-          },
-          body: JSON.stringify(currentUser)
-        })
-        .then(res =>res.json())
-        .then(data=> {
-          localStorage.setItem('token' , data.token)
-          navigate(from, {replace:true})
-        })
-        .catch(err => console.error(err))
-
+//   if(token){
+//     navigate('/')
+//   }
+  const handleSignUp = (data) => {
+    createUser(data.email, data.password)
+      .then((result) => {
+        const userInfo = {
+          displayName: data.name,
+        };
+        updateUser(userInfo)
+          .then((result) => {
+            // console.log(result)
+            saveUserData(data.name, data.email);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+        console.log(result);
+        toast("user sign up succesfully");
       })
-      .catch(err=>console.log(err))
+      .catch((err) => {
+        setRegisterError(err.message);
+      });
+  };
 
-   }
+  const saveUserData = (name, email) => {
+    const user = { name, email };
+    fetch("http://localhost:5000/users", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(user),
+    })
+    .then(res =>res.json())
+    .then(data => {
+      setUserEmail(email)
+    }
+    )
+    .catch(err => console.log(err))
+  };
 
+ 
+  return (
+    <form
+      className="mt-24 flex flex-col justify-center items-center"
+      onSubmit={handleSubmit(handleSignUp)}
+    >
+      <h1 className="text-4xl mb-5">Register</h1>
 
-
-   return (
-      <div className="hero min-h-screen bg-base-200">
-      <div className="hero-content flex-col ">
-        <div className="text-center lg:text-left">
-          <h1 className="text-5xl font-bold">Register now!</h1>
-          <p className="py-6">You have to Register to take an deep look in our services. There are many ways to take you up at register options. Please fill up the form to proceed.</p>
-        </div>
-        <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
-          <form onSubmit={handleRegister} className="card-body">
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text">Full Name</span>
-              </label>
-              <input name='name' type="text" placeholder="Your Full Name" className="input input-bordered" />
-            </div>
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text">Photo Url</span>
-              </label>
-              <input name='photo' type="text" placeholder="Your Photo Url" className="input input-bordered" />
-            </div>
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text">Email</span>
-              </label>
-              <input name='email' type="text" placeholder="email" className="input input-bordered" />
-            </div>
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text">Password</span>
-              </label>
-              <input name='password' type="text" placeholder="password" className="input input-bordered" />
-              
-              <label className="label">
-                <p><small>Already Have an Account?</small> <Link to='/login' className="label-text-alt link link-hover font-bold">Login Here</Link></p>
-              </label>
-            </div>
-            <div className=" mt-0">
-              <button type='submit' className="btn btn-outline-warning w-full">Register</button>
-            </div>
-          </form>
-        </div>
+      {/* email field  */}
+      <div className="form-control w-full max-w-xs">
+        <label className="label">
+          <span className="label-text">Name</span>
+        </label>
+        <input
+          {...register("name", {
+            required: "name is required",
+            minLength: { value: 5, message: "mis length is 5 characters" },
+          })}
+          type="text"
+          className="input input-bordered w-full max-w-xs"
+        />
+        {errors.name && (
+          <span className="text-red-500">{errors.name.message}</span>
+        )}
       </div>
-    </div>
-   );
+      <div className="form-control w-full max-w-xs">
+        <label className="label">
+          <span className="label-text">Email</span>
+        </label>
+        <input
+          {...register("email", {
+            required: "email is required",
+            minLength: { value: 10, message: "min length is 10 for email" },
+          })}
+          type="text"
+          className="input input-bordered w-full max-w-xs"
+        />
+        {errors.email && <span className="text-red-500">Email Required</span>}
+      </div>
+      {/* password field  */}
+      <div className="form-control w-full max-w-xs">
+        <label className="label">
+          <span className="label-text">Password</span>
+        </label>
+        <input
+          type="password"
+          {...register("password", {
+            required: "password is required",
+            minLength: { value: 8, message: "minumum 8 characters or longer" },
+          })}
+          className="input input-bordered w-full max-w-xs"
+        />
+        {/* {errors.password && <span className="text-red-500">This field is required</span>} */}
+        {errors.password && (
+          <span className="text-red-500">{errors.password.message}</span>
+        )}
+        <label className="label">
+          <span className="label-text-alt">Forget Password ?</span>
+        </label>
+      </div>
+      <button type='submit' className="btn btn-secondary w-full max-w-xs my-5">Login</button>
+      <div>
+        <p>
+          Already have an account?{" "}
+          <Link to="/login" className="text-secondary">
+            login your accout
+          </Link>
+        </p>
+        <div className="divider max-w-xs ">OR</div>
+        <button className="btn btn-accent w-full max-w-xs">
+          Continue With Google
+        </button>
+      </div>
+      {registerError && (
+        <p className="text-xl text-red-700 my-5">{registerError}</p>
+      )}
+    </form>
+  );
 };
 
 export default Register;
