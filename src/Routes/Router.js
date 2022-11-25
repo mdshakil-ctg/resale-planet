@@ -2,10 +2,12 @@ import DashboardLayout from "../Layout/DashboardLayout/DashboardLayout";
 import Main from "../Layout/Main/Main";
 import AddProduct from "../Pages/Dashboard/AddProduct/AddProduct";
 import BuyerDashboard from "../Pages/Dashboard/BuyerDashboard";
+import Payment from "../Pages/Dashboard/Payment";
 import CatagoryDetails from "../Pages/Home/AllCatagories/CatagoryDetails/CatagoryDetails";
 import Home from "../Pages/Home/Home/Home";
 import Login from "../Pages/Login/Login";
 import Register from "../Pages/Register/Register";
+import DisplayError from "../Pages/Shared/DisplayError/DisplayError";
 import PrivateRoute from "./PrivateRoute/PrivateRoute";
 import SellerRoute from "./SellerRoute/SellerRoute";
 
@@ -15,6 +17,7 @@ export const router = createBrowserRouter([
    {
       path: '/',
       element: <Main></Main>,
+      errorElement: <DisplayError></DisplayError>,
       children: [
          {
             path:'/',
@@ -39,6 +42,7 @@ export const router = createBrowserRouter([
    {
       path:'/dashboard',
       element:<DashboardLayout></DashboardLayout>,
+      errorElement: <DisplayError></DisplayError>,
       children: [
          {
             path: 'dashboard/buyer-dashboard',
@@ -48,6 +52,11 @@ export const router = createBrowserRouter([
             path: 'dashboard/add-product',
             element: <SellerRoute><AddProduct></AddProduct></SellerRoute>
          },
+         {
+            path: '/dashboard/payment/:id',
+            element: <Payment></Payment>,
+            loader: ({params})=>fetch(`http://localhost:5000/dashboard/payment/${params.id}`)
+         }
 
       ]
    }

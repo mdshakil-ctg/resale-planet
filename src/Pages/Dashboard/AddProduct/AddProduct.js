@@ -1,11 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../Context/UserContext";
+import Loader from "../../Loader/Loader";
 
 const AddProduct = () => {
+  const [loading, setLoading] = useState(true);
    const {user} = useContext(AuthContext)
  
 
@@ -40,6 +42,7 @@ const AddProduct = () => {
    const formData = new FormData();
    formData.append('image', image)
    const url = `https://api.imgbb.com/1/upload?key=${key}`
+   setLoading(false)
    fetch(url,{
       method:'POST',
       body: formData
@@ -75,6 +78,7 @@ const AddProduct = () => {
             console.log(result)
             if(result.acknowledged){
                toast.success('Product has to be added successfully')
+               setLoading(true);
                // navigate('/dashboard/all-doctors')
 
             }
@@ -84,6 +88,9 @@ const AddProduct = () => {
 
 
   };
+  if(!loading){
+    return <Loader></Loader>
+  }
   return (
     <div>
       <form
