@@ -5,7 +5,7 @@ import { AuthContext } from "../../../../Context/UserContext";
 const ShowCatagory = ({ catagory, setModalData }) => {
   
   const { user } = useContext(AuthContext);
-  console.log(user);
+  // console.log(user);
   const {
     name,
     img_url,
@@ -16,6 +16,7 @@ const ShowCatagory = ({ catagory, setModalData }) => {
     post_time,
     seller_name,
     veryfied_seller,
+    _id
   } = catagory;
 
   // const date = new Date()
@@ -79,7 +80,7 @@ const ShowCatagory = ({ catagory, setModalData }) => {
         <p>Posted At: {post_time}</p>
         <p>Location : {location}</p>
         <p>Seller : {seller_name}</p>
-        {veryfied_seller !== "true" ? (
+        {veryfied_seller === "true" ? (
           <input type="checkbox" className="checkbox" disabled checked />
         ) : (
           <>

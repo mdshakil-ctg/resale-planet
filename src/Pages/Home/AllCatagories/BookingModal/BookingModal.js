@@ -10,9 +10,11 @@ const BookingModal = ({modalData, setModalData}) => {
       price,
       original_price,
       used_duration,
+      seller_email,
       post_time,
       seller_name,
       veryfied_seller,
+      _id
     } = modalData;
    
    const {user} = useContext(AuthContext);
@@ -29,7 +31,7 @@ const BookingModal = ({modalData, setModalData}) => {
       
       const bookingData = {
         userName: user?.displayName,
-        email: user?.email,
+        buyer_email: user?.email,
         phone,
         carModel: name,
         img_url,
@@ -37,7 +39,9 @@ const BookingModal = ({modalData, setModalData}) => {
         price,
         original_price,
         used_duration,
-        bookingDate
+        bookingDate,
+        seller_email,
+        product_id: _id,
       };
       console.log(bookingData);
       fetch("http://localhost:5000/bookings", {

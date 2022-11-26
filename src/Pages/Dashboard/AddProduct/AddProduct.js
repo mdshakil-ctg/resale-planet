@@ -10,13 +10,14 @@ const AddProduct = () => {
   const [loading, setLoading] = useState(true);
    const {user} = useContext(AuthContext)
  
+   const navigate = useNavigate()
 
    const date = new Date()
   const time = date.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
   const current_date =date.getDate()+"-"+(date.getMonth()+1)+"-"+date.getFullYear() ;
   const bookingDate = time + " " + current_date;
 
-   
+  
    // const navigate = useNavigate()
    const key = process.env.REACT_APP_imgbb_key;
 //   const { data: specialties = [] } = useQuery({
@@ -36,7 +37,6 @@ const AddProduct = () => {
 
   const handleAddProduct = (data) => {
    const {name, price, specialty, phone ,location, description, newPrice, used_duration, catagory} = data
-
    //  console.log(data.photo[0]);
    const image = data.photo[0]
    const formData = new FormData();
@@ -52,7 +52,7 @@ const AddProduct = () => {
      
       if(result.success){
          const postData = {
-            email: user.email,
+            seller_email: user.email,
             seller_name: user.displayName,
             name,
             price,
@@ -79,6 +79,7 @@ const AddProduct = () => {
             if(result.acknowledged){
                toast.success('Product has to be added successfully')
                setLoading(true);
+               navigate('/dashboard/dashboard/my-products')
                // navigate('/dashboard/all-doctors')
 
             }

@@ -18,7 +18,10 @@ const BuyerBookingCard = ({booking}) => {
            <p>{location}</p>
           
            <div className="card-actions justify-end">
-             <Link to={`/dashboard/payment/${booking._id}`}><button className="btn btn-primary">Pay</button></Link>
+             {
+              booking.paid ? <Link to=''><button className="btn btn-warning" >Paid</button></Link> :
+              <Link to={`/dashboard/payment/${booking._id}`}><button className="btn btn-primary">Pay</button></Link>
+             }
            </div>
          </div>
        </div>

@@ -8,7 +8,7 @@ const CatagoryDetails = () => {
   const [modalData, setModalData] = useState(null)
    
   const catagories = useLoaderData();
-  console.log(catagories)
+  console.log(modalData)
  
   return (
     <div>
