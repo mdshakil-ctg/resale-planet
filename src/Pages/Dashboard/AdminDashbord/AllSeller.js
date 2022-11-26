@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import React from 'react';
+import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 
 const AllSeller = () => {
@@ -25,6 +25,20 @@ const AllSeller = () => {
       }
    }
 
+   const handleVerify = id =>{
+      fetch(`http://localhost:5000/user/verify/${id}`)
+      .then(res=> res.json())
+      .then(result => {
+         console.log(result)
+         if(result.modifiedCount>0){
+            toast('User is verified')
+            refetch()
+         }
+      })
+      .catch(err => console.log(err))
+   }
+
+
    return (
       <div>
          <div className="overflow-x-auto">
@@ -42,12 +56,17 @@ const AllSeller = () => {
      
       {
          users?.map((user, i) => <tr
+         
          key={user._id}
          className="hover">
          <th>{i + 1}</th>
          <td>{user.name}</td>
          <td>{user.email}</td>
-         <td><button onClick={()=>deleteUser(user._id)} className='btn btn-warning btn-sm'>Delete</button></td>
+         <td><button onClick={()=>deleteUser(user._id)} className='btn btn-warning btn-sm'>Delete</button>
+         {
+            user.status !== "verifyed" && <button onClick={()=>handleVerify(user._id)} className='btn btn-warning btn-sm'>Verify</button>
+         }
+         </td>
          
        </tr>)
       }
