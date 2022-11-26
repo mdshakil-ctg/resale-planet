@@ -1,6 +1,8 @@
 import DashboardLayout from "../Layout/DashboardLayout/DashboardLayout";
 import Main from "../Layout/Main/Main";
 import AddProduct from "../Pages/Dashboard/AddProduct/AddProduct";
+import AllBuyer from "../Pages/Dashboard/AdminDashbord/AllBuyer";
+import AllSeller from "../Pages/Dashboard/AdminDashbord/AllSeller";
 import BuyerDashboard from "../Pages/Dashboard/BuyerDashboard";
 import MyProducts from "../Pages/Dashboard/MyProducts/MyProducts";
 import Payment from "../Pages/Dashboard/Payment";
@@ -9,6 +11,7 @@ import Home from "../Pages/Home/Home/Home";
 import Login from "../Pages/Login/Login";
 import Register from "../Pages/Register/Register";
 import DisplayError from "../Pages/Shared/DisplayError/DisplayError";
+import AdminRoute from "./AdminRoute/AdminRoute";
 import PrivateRoute from "./PrivateRoute/PrivateRoute";
 import SellerRoute from "./SellerRoute/SellerRoute";
 
@@ -56,6 +59,14 @@ export const router = createBrowserRouter([
          {
             path: 'dashboard/my-products',
             element: <SellerRoute><MyProducts></MyProducts></SellerRoute>
+         },
+         {
+            path: 'dashboard/all-buyer',
+            element: <AdminRoute><AllBuyer></AllBuyer></AdminRoute>
+         },
+         {
+            path: 'dashboard/all-seller',
+            element: <AdminRoute><AllSeller></AllSeller></AdminRoute>
          },
          {
             path: '/dashboard/payment/:id',

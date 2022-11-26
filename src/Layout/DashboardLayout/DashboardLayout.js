@@ -9,6 +9,7 @@ import Navbar from '../../Pages/Shared/Navbar';
 const DashboardLayout = () => {
   const {user} = useContext(AuthContext)
   const [isSeller] = useSeller(user?.email)
+  const [isAdmin] = useAdmin(user?.email)
    return (
       <div>
          <Navbar></Navbar>
@@ -36,7 +37,13 @@ const DashboardLayout = () => {
          </>
       }
       {
-        !isSeller && <li className='text-xl font-bold'><Link to='dashboard/buyer-dashboard'>My Orders</Link></li>
+        (!isSeller && !isAdmin) && <li className='text-xl font-bold'><Link to='dashboard/buyer-dashboard'>My Orders</Link></li>
+      }
+      {
+        isAdmin && <>
+         <li className='text-xl font-bold'><Link to='dashboard/all-buyer'>All Buyers</Link></li>
+         <li className='text-xl font-bold'><Link to='dashboard/all-seller'>All Sellers</Link></li>
+        </>
       }
 
     </ul>
