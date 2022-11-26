@@ -6,6 +6,7 @@ import AllBuyer from "../Pages/Dashboard/AdminDashbord/AllBuyer";
 import AllSeller from "../Pages/Dashboard/AdminDashbord/AllSeller";
 import BuyerDashboard from "../Pages/Dashboard/BuyerDashboard";
 import MyProducts from "../Pages/Dashboard/MyProducts/MyProducts";
+import MyWishlist from "../Pages/Dashboard/MyWishlist/MyWishlist";
 import Payment from "../Pages/Dashboard/Payment";
 import CatagoryDetails from "../Pages/Home/AllCatagories/CatagoryDetails/CatagoryDetails";
 import Home from "../Pages/Home/Home/Home";
@@ -58,6 +59,10 @@ export const router = createBrowserRouter([
             element: <BuyerDashboard></BuyerDashboard>
          },
          {
+            path: 'dashboard/my-wishlist',
+            element: <MyWishlist></MyWishlist>
+         },
+         {
             path: 'dashboard/add-product',
             element: <SellerRoute><AddProduct></AddProduct></SellerRoute>
          },
@@ -73,6 +78,7 @@ export const router = createBrowserRouter([
             path: 'dashboard/all-seller',
             element: <AdminRoute><AllSeller></AllSeller></AdminRoute>
          },
+         
          {
             path: '/dashboard/payment/:id',
             element: <Payment></Payment>,

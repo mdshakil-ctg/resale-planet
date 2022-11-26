@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import toast from 'react-hot-toast';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../Context/UserContext';
+import UseToken from '../../Hook/UseToken';
 
 
 
@@ -11,37 +12,43 @@ const Login = () => {
   const location = useLocation();
   const from = location?.state?.from?.pathname || '/';
   const {loginWithGoogle, signIn} = useContext(AuthContext);
-
   const [error, setError] = useState(null);
+  const [userEmail, setUserEmail] = useState("");
+    const [token] = UseToken(userEmail)
+
+    if(token){
+      navigate(from || '/')
+    }
 
    const handleLogin =(event) =>{
       event.preventDefault();
       const form = event.target;
       const email = form.email.value;
       const password = form.password.value;
-      console.log(email, password);
+      // console.log(email, password);
   
   
       signIn(email, password)
       .then(result=>{
         const user = result.user;
+        setUserEmail(user.email)
 
-        const currentUser = {
-          email: user.email
-        }
-        fetch('http://localhost:5000/jwt', {
-          method: 'POST',
-          headers: {
-            'content-type': 'application/json'
-          },
-          body: JSON.stringify(currentUser)
-        })
-        .then(res =>res.json())
-        .then(data=> {
-          localStorage.setItem('token' , data.token)
-          navigate(from || '/', {replace:true})
-        })
-        .catch(err => console.error(err))
+        // const currentUser = {
+        //   email: user.email
+        // }
+        // fetch('http://localhost:5000/jwt', {
+        //   method: 'POST',
+        //   headers: {
+        //     'content-type': 'application/json'
+        //   },
+        //   body: JSON.stringify(currentUser)
+        // })
+        // .then(res =>res.json())
+        // .then(data=> {
+        //   localStorage.setItem('token' , data.token)
+        //   navigate(from || '/', {replace:true})
+        // })
+        // .catch(err => console.error(err))
 
       })
       .catch(error=>{
@@ -67,30 +74,30 @@ const Login = () => {
     };
 
     const googleSignIn = () =>{
-      loginWithGoogle()
       
+      loginWithGoogle()
       .then(result=>{
         const user = result.user;
         const role = 'Buyer'
       saveUserData(user?.displayName, user?.email, role)
       toast('Sign Up Succesfull')
-
-        const currentUser = {
-          email: user.email
-        }
-        fetch('http://localhost:5000/jwt', {
-          method: 'POST',
-          headers: {
-            'content-type': 'application/json'
-          },
-          body: JSON.stringify(currentUser)
-        })
-        .then(res =>res.json())
-        .then(data=> {
-          localStorage.setItem('token' , data.token)
-          navigate(from || '/', {replace:true})
-        })
-        .catch(err => console.error(err))
+        setUserEmail(user?.email)
+        // const currentUser = {
+        //   email: user.email
+        // }
+        // fetch('http://localhost:5000/jwt', {
+        //   method: 'POST',
+        //   headers: {
+        //     'content-type': 'application/json'
+        //   },
+        //   body: JSON.stringify(currentUser)
+        // })
+        // .then(res =>res.json())
+        // .then(data=> {
+        //   localStorage.setItem('token' , data.token)
+        //   navigate(from || '/', {replace:true})
+        // })
+        // .catch(err => console.error(err))
 
       })
       .catch(err => console.log(err))

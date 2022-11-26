@@ -4,7 +4,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { AuthContext } from "../../Context/UserContext";
-// import UseToken from "../../hook/UseToken";
+import UseToken from './../../Hook/UseToken';
+
 
 const Register = () => {
   const {
@@ -14,26 +15,26 @@ const Register = () => {
   } = useForm();
   const { createUser, updateUser, loginWithGoogle } = useContext(AuthContext);
   const [registerError, setRegisterError] = useState("");
-  const [userEmail, setUserEmail] = useState("");
+  // const [userEmail, setUserEmail] = useState("");
+  const [token, setToken] = useState('')
+  
   const navigate = useNavigate();
-  //   const [token] = UseToken(userEmail)
+    // const [token] = UseToken(userEmail)
 
-  //   if(token){
-  //     navigate('/')
-  //   }
+    // if(token){
+    //   navigate('/')
+    // }
   const handleSignUp = (data) => {
   
     createUser(data.email, data.password)
       .then((result) => {
+        // setUserEmail(data.email);
         const userInfo = {
           displayName: data.name,
           role: data.role
         };
         updateUser(userInfo)
-          .then((result) => {
-            // console.log(result)
-            saveUserData(data.name, data.email, data.role);
-          })
+          .then((result) => saveUserData(data.name, data.email, data.role))
           .catch((err) => {
             console.log(err);
           });
@@ -57,7 +58,16 @@ const Register = () => {
       .then((res) => res.json())
       .then((data) => {
         console.log(data)
-        setUserEmail(email);
+        fetch(`http://localhost:5000/jwt?email=${email}`)
+            .then(res=> res.json())
+            .then(data => {
+              console.log(data)
+              if(data.accessToken){
+                localStorage.setItem('token', data.accessToken)
+               setToken(data.accessToken)
+              }
+            })
+            .catch(err=>console.log(err)) 
         navigate('/')
       })
       .catch((err) => console.log(err));
@@ -70,7 +80,22 @@ const Register = () => {
       console.log(user)
       const role = 'Buyer'
       saveUserData(user?.displayName, user?.email, role)
-      toast('Sign Up Succesfull')
+      // setUserEmail(user?.email)
+
+      fetch(`http://localhost:5000/jwt?email=${user?.email}`)
+    .then(res=> res.json())
+    .then(data => {
+      console.log(data)
+      if(data.accessToken){
+        localStorage.setItem('token', data.accessToken)
+       setToken(data.accessToken)
+      }
+    })
+    .catch(err=>console.log(err)) 
+
+      // console.log("4",user.email)
+      // console.log('hello',userEmail)
+      toast('User Sign Up Succesfull')
       navigate('/')
     })
     .catch(err => console.log(err))

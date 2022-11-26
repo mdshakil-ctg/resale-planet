@@ -5,7 +5,7 @@ import toast from 'react-hot-toast';
 const AllSeller = () => {
 
    const {data: users=[], isLoading, refetch} = useQuery({
-      queryKey: ['allDoctors'],
+      queryKey: ['allseller'],
       queryFn: ()=> fetch(`http://localhost:5000/dashboard/all-seller`)
       .then(res=>res.json())
    })

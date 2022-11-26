@@ -9,7 +9,7 @@ const BuyerDashboard = () => {
    const email = user?.email
    const {data : bookingData = [], isLoading} = useQuery({
       queryKey: ['bookingData', email],
-      queryFn: () => fetch(`http://localhost:5000/dashboard?email=${email}`)
+      queryFn: () => fetch(`http://localhost:5000/dashboard/myorder?email=${email}`)
       .then(res => res.json())
       .then(data=>{
          console.log(data)
