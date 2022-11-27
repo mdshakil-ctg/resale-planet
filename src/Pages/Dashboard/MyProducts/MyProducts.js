@@ -5,23 +5,13 @@ import { AuthContext } from '../../../Context/UserContext';
 
 
 const MyProducts = () => {
-//   const [products, setProducts] = useState([])
    const {user} = useContext(AuthContext)
    
-
-   const {data: products=[], isLoading, refetch} = useQuery({
+   const {data: products=[], refetch} = useQuery({
       queryKey: ['allDoctors', user.email],
       queryFn: ()=> fetch(`http://localhost:5000/dashboard/my-product?email=${user.email}`)
       .then(res=>res.json())
    })
-
-   console.log(products)   
-   // useEffect(()=>{
-   //    fetch(`http://localhost:5000/dashboard/my-product?email=${user.email}`)
-   //    .then(res=> res.json())
-   //    .then(data=> setProducts(data))
-   // },[user.email])
-   // console.log(products)
 
    const handleDelete = id =>{
       fetch(`http://localhost:5000/dashboard/my-product/${id}`, {
@@ -32,7 +22,6 @@ const MyProducts = () => {
       })
       .then(res=>res.json())
       .then(data=>{
-         console.log(data)
          if(data.result.deletedCount > 0){
             toast.success(`Product ${data.name.name} Removed Succesfully`)
             refetch()
@@ -89,7 +78,12 @@ const MyProducts = () => {
       {
          products.map((product, i) =>  <tr key={i} className="hover">
          <th><img className='w-20 rounded-md' src={product.img_url} alt="" /></th>
-         <td>{product.name}</td>
+         <td>{product.name}
+         {
+            product?.purchased ? <p className='text-orange-500'>Sold</p> :
+             <p classname='text-red-900'>Available</p>
+         }
+         </td>
          <td>{product.phone}</td>
          <td>{product.location}</td>
          <td>
@@ -100,9 +94,6 @@ const MyProducts = () => {
        </tr>)
       }
      
-     
-      
-      
     </tbody>
   </table>
 </div>
