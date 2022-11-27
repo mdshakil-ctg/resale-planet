@@ -99,7 +99,7 @@ const ShowCatagory = ({ catagory, setModalData }) => {
             <input
               type="checkbox"
               checked
-              className="checkbox checkbox-success"
+              className="checkbox checkbox-info"
             />
 
             

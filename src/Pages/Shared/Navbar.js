@@ -11,7 +11,7 @@ const Navbar = () => {
   const handleLogout = () =>{
     logOut()
     .then(result => {
-      navigate('/')
+      navigate('/login')
     })
     .catch(err => console.error(err))
   }

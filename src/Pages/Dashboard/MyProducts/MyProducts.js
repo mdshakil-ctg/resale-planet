@@ -15,7 +15,7 @@ const MyProducts = () => {
       .then(res=>res.json())
    })
 
-   
+   console.log(products)   
    // useEffect(()=>{
    //    fetch(`http://localhost:5000/dashboard/my-product?email=${user.email}`)
    //    .then(res=> res.json())
@@ -46,22 +46,31 @@ const MyProducts = () => {
             method: 'POST',
             headers:{
                'content-type': 'application/json',
-               authorization: `bearer ${localStorage.getItem('token')}`
+               authorization: `bearer ${localStorage.getItem('token')}`,
+               email:user?.email
             }
          }).then(res=>res.json())
          .then(result => {
             console.log(result)
-            if(result.acknowledged){
-               toast('Product added to the homepage for advertized')
+            if(result.errorMessage){
+               return toast(result.errorMessage)
+               
             }
-            toast(result.message)
+            if(result.acknowledged){
+               return toast('Product added to the homepage for advertized')
+
+            }
+            else{
+               return toast(result.message)
+            }
+            
          })
          .catch(err=> console.log(err))
       }
    
    return (
       <div>
-         <h2>this is my product page</h2>
+         {products.length <= 0 && <h2 className='text-center text-2xl my-12'>You Havn't Added Any Product Yet.</h2>}
          <div>
          <div className="overflow-x-auto">
   <table className="table w-full">
@@ -80,7 +89,7 @@ const MyProducts = () => {
       {
          products.map((product, i) =>  <tr key={i} className="hover">
          <th><img className='w-20 rounded-md' src={product.img_url} alt="" /></th>
-         <td>{product.carModel}</td>
+         <td>{product.name}</td>
          <td>{product.phone}</td>
          <td>{product.location}</td>
          <td>

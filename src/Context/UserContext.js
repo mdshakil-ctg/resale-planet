@@ -14,6 +14,7 @@ const UserContext = ({children}) => {
 
    const [user, setUser] = useState(null);
    const [loading, setLoading] = useState(true);
+   const [error, setError] = useState('')
 
    const createUser = (email, password) =>{
       setLoading(true)
@@ -56,7 +57,7 @@ const UserContext = ({children}) => {
       } ;
    }, [])
 
-   const authInfo = {user, setUser, loading, createUser, updateUser, loginWithGoogle, signIn, logOut};
+   const authInfo = {user, setUser, loading, createUser, updateUser, loginWithGoogle, signIn, logOut, error, setError};
    return (
       <AuthContext.Provider value={authInfo}>
          {children}
