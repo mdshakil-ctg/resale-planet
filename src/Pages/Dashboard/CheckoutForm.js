@@ -12,7 +12,9 @@ const CheckoutForm = ({ booking }) => {
 
     const stripe = useStripe();
     const elements = useElements();
-    const { price, email, userName, _id } = booking;
+    const { price, email, userName, _id, product_id
+    } = booking;
+    console.log(booking)
 
     useEffect(() => {
         
@@ -80,7 +82,8 @@ const CheckoutForm = ({ booking }) => {
                 price,
                 transactionId: paymentIntent.id,
                 email,
-                bookingId: _id
+                bookingId: _id,
+                product_id
             }
             fetch('http://localhost:5000/payments', {
                 method: 'POST',

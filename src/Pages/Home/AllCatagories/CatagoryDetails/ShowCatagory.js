@@ -18,7 +18,7 @@ const ShowCatagory = ({ catagory, setModalData }) => {
     seller_name,
     _id
   } = catagory;
-  // console.log("cataa",catagory);
+  console.log("cataa",catagory);
 
   // const handleReport = input =>{
     
@@ -73,6 +73,7 @@ const ShowCatagory = ({ catagory, setModalData }) => {
   }
 
   return (
+    catagory.purchased ||
     <div className="card glass mx-10 my-20">
       <figure>
         <img src={img_url} alt="car!" />
@@ -93,13 +94,13 @@ const ShowCatagory = ({ catagory, setModalData }) => {
         
 
         {catagory?.status !== "verifyed" ? (
-          <input type="checkbox" className="checkbox" checked />
+          <input type="checkbox" className="checkbox checkbox-sm rounded-full"  defaultChecked  />
         ) : (
           <>
             <input
               type="checkbox"
-              checked
-              className="checkbox checkbox-info"
+              defaultChecked 
+              className="checkbox checkbox-sm checkbox-info rounded-full"
             />
 
             

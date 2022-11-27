@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 const BuyerBookingCard = ({booking}) => {
    const {carModel,email, img_url ,location ,original_price, phone ,price, used_duration ,userName} = booking
    
+   console.log(booking)
    
    return (
       <div className="card card-compact w-1/2 mx-auto bg-base-100 shadow-xl">

@@ -1,8 +1,9 @@
 import React from 'react';
 
 const AdvertiseCard = ({product}) => {
-   const {name,price,img_url, phone, post_time,specialty, used_duration, location} = product
+   const {name,price,img_url, phone, post_time,specialty, used_duration, location, purchased} = product
    return (
+    purchased ||
       <div className="card w-96 bg-base-100 shadow-xl">
   <figure><img className='w-full h-48' src={img_url} alt="Shoes" /></figure>
   <div className="card-body">

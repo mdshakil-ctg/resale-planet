@@ -8,12 +8,13 @@ const CatagoryDetails = () => {
   const [modalData, setModalData] = useState(null)
    
   const catagories = useLoaderData();
-  console.log(modalData)
+  
+  console.log(catagories)
  
   return (
     <div>
       <h1>this is catagory details page for catagory 1</h1>
-      { catagories?.length>0 &&
+      { catagories?.length >0 &&
          catagories.map((catagory,i)=> <ShowCatagory
          catagory={catagory}
          key={i}
