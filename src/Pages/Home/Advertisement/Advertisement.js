@@ -1,20 +1,26 @@
 import { useQuery } from '@tanstack/react-query';
 import React from 'react';
 import AdvertiseCard from './AdvertiseCard';
+import { useEffect } from 'react';
+import axios from 'axios';
+import { useState } from 'react';
 
 const Advertisement = () => {
+   const [products, setProducts] = useState([])
 
-   const {data: products=[], isLoading, refetch} = useQuery({
-      queryKey: ['allDoctors'],
-      queryFn: ()=> fetch('http://localhost:5000/advertise')
-      .then(res=>res.json())
-   })
-   console.log(products)
+   const getApiData = async() =>{
+      try{
+         const res = await axios.get('http://localhost:5000/advertise')
+         setProducts(res.data)
+      }
+      catch{
 
+      }
+   }
 
-
-
-
+   useEffect(()=>{
+      getApiData()
+   },[])
 
    return (
       <div className='text-center my-24'>
