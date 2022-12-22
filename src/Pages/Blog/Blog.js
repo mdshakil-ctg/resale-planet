@@ -2,8 +2,9 @@ const Blog = () => {
   return (
     <div>
       <div className="p-5">
-        <h2 className="text-3xl font-semibold">
-          What are the different ways to manage a state in a React application?
+        <h2 className="text-3xl font-semibold mt-10">
+          * What are the different ways to manage a state in a React
+          application?
         </h2>
         <p className="my-5">
           Managing state in your React apps isn’t as simple as using useState or
@@ -49,7 +50,7 @@ const Blog = () => {
       </div>
       <div className="p-5">
         <h2 className="text-3xl font-semibold">
-          How does prototypical inheritance work?
+          * How does prototypical inheritance work?
         </h2>
         <p className="my-5">
           In programming, we often want to take something and extend it. For
@@ -83,7 +84,7 @@ const Blog = () => {
       </div>
       <div className="p-5">
         <h2 className="text-3xl font-semibold">
-          What is a unit test? Why should we write unit tests?
+          * What is a unit test? Why should we write unit tests?
         </h2>
         <p className="my-5">
           Unit testing is a software development process in which the smallest
@@ -115,7 +116,7 @@ const Blog = () => {
         </p>
       </div>
       <div className="p-5">
-        <h2 className="text-3xl font-semibold">React vs. Angular vs. Vue?</h2>
+        <h2 className="text-3xl font-semibold">* React vs. Angular vs. Vue?</h2>
         <p className="my-5">
           This post is a comprehensive guide on which is perhaps the right
           solution for you: Angular vs React vs Vue. Just a couple of years ago,

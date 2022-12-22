@@ -24,7 +24,6 @@ const Navbar = () => {
       </label>
       <ul tabIndex={0} className="menu menu-compact dropdown-content bg-gray-700 mt-3 p-2 shadow rounded-box w-52">
         <li><Link to='/'>Home</Link></li>
-        <li><Link to='/services'>Services</Link></li>
         <li><Link to='/blog'>Blogs</Link></li>
         {
           user?.uid && <li><Link to='/dashboard'>Dashboard</Link></li>
@@ -34,10 +33,9 @@ const Navbar = () => {
    
     <h2 className="font-semibold text-xl lg:text-3xl ml-5">Resale Planet</h2>
   </div>
-  <div className="navbar-center hidden lg:flex">
+  <div className="navbar-center hidden lg:flex justify-center">
     <ul className="menu menu-horizontal p-0">
       <li><Link to='/'>Home</Link></li>
-      <li><Link to='/services'>Services</Link></li>
       <li><Link to='/blog'>Blogs</Link></li>
       {
           user?.uid && <li><Link to='/dashboard'>Dashboard</Link></li>
@@ -58,6 +56,9 @@ const Navbar = () => {
        user?.photoURL ? <img className='rounded-lg' src={user?.photoURL} style={{width:'30px'}} alt=''/>: <Link to='/blogs' className='text-decoration-none text-white'>  <UserCircleIcon className="h-6 w-6 mx-auto text-blue-500"/></Link>
    }
     </div>
+   
+  </div>
+  <div className='flex justify-end w-full lg:hidden'>
     <label htmlFor="dashboard-drawer" tabIndex={1} className="btn btn-ghost flex justify-end lg:hidden">
             <svg
               xmlns="http://www.w3.org/2000/svg"

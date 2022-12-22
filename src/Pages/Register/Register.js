@@ -4,8 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { AuthContext } from "../../Context/UserContext";
-import UseToken from './../../Hook/UseToken';
-
+import { EyeIcon } from "@heroicons/react/24/solid";
 
 const Register = () => {
   const {
@@ -15,23 +14,17 @@ const Register = () => {
   } = useForm();
   const { createUser, updateUser, loginWithGoogle } = useContext(AuthContext);
   const [registerError, setRegisterError] = useState("");
-  // const [userEmail, setUserEmail] = useState("");
-  const [token, setToken] = useState('')
-  
-  const navigate = useNavigate();
-    // const [token] = UseToken(userEmail)
+  const [token, setToken] = useState("");
+  const [password, setPassword] = useState(true)
 
-    // if(token){
-    //   navigate('/')
-    // }
+  const navigate = useNavigate();
+
   const handleSignUp = (data) => {
-  
     createUser(data.email, data.password)
       .then((result) => {
-        // setUserEmail(data.email);
         const userInfo = {
           displayName: data.name,
-          role: data.role
+          role: data.role,
         };
         updateUser(userInfo)
           .then((result) => saveUserData(data.name, data.email, data.role))
@@ -45,10 +38,10 @@ const Register = () => {
         setRegisterError(err.message);
       });
   };
-  
+
   const saveUserData = (name, email, role) => {
-    const user = { name, email , role};
-    fetch("http://localhost:5000/users", {
+    const user = { name, email, role };
+    fetch("https://resale-planet-server.vercel.app/users", {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -57,58 +50,65 @@ const Register = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data)
-        fetch(`http://localhost:5000/jwt?email=${email}`)
-            .then(res=> res.json())
-            .then(data => {
-              console.log(data)
-              if(data.accessToken){
-                localStorage.setItem('token', data.accessToken)
-               setToken(data.accessToken)
-              }
-            })
-            .catch(err=>console.log(err)) 
-        navigate('/')
+        console.log(data);
+        fetch(`https://resale-planet-server.vercel.app/jwt?email=${email}`)
+          .then((res) => res.json())
+          .then((data) => {
+            console.log(data);
+            if (data.accessToken) {
+              localStorage.setItem("token", data.accessToken);
+              setToken(data.accessToken);
+            }
+          })
+          .catch((err) => console.log(err));
+        navigate("/");
       })
       .catch((err) => console.log(err));
   };
 
   const handleGoogleLogin = () => {
     loginWithGoogle()
-    .then(result => {
-      const user = result.user;
-      console.log(user)
-      const role = 'Buyer'
-      saveUserData(user?.displayName, user?.email, role)
-      // setUserEmail(user?.email)
+      .then((result) => {
+        const user = result.user;
+        console.log(user);
+        const role = "Buyer";
+        saveUserData(user?.displayName, user?.email, role);
 
-      fetch(`http://localhost:5000/jwt?email=${user?.email}`)
-    .then(res=> res.json())
-    .then(data => {
-      console.log(data)
-      if(data.accessToken){
-        localStorage.setItem('token', data.accessToken)
-       setToken(data.accessToken)
-      }
-    })
-    .catch(err=>console.log(err)) 
+        fetch(`https://resale-planet-server.vercel.app/jwt?email=${user?.email}`)
+          .then((res) => res.json())
+          .then((data) => {
+            console.log(data);
+            if (data.accessToken) {
+              localStorage.setItem("token", data.accessToken);
+              setToken(data.accessToken);
+            }
+          })
+          .catch((err) => console.log(err));
 
-      // console.log("4",user.email)
-      // console.log('hello',userEmail)
-      toast('User Sign Up Succesfull')
-      navigate('/')
-    })
-    .catch(err => console.log(err))
+        toast("User Sign Up Succesfull");
+        navigate("/");
+      })
+      .catch((err) => console.log(err));
   };
+
+  const eyeButton = e =>{
+    setPassword(!password)
+  }
+
+  if(token){
+    navigate('/')
+  }
 
   return (
     <form
-      className="mt-24 flex flex-col justify-center items-center"
+      className="my-12 flex flex-col justify-center items-center"
       onSubmit={handleSubmit(handleSignUp)}
     >
-      <h1 className="text-4xl mb-5">Register</h1>
-
-      {/* email field  */}
+      <h1 className="text-4xl mb-5 font-extrabold">Register Now</h1>
+      <p className="mb-5 text-gray-500">
+              You have to register first to shop. There are
+              huge amount of content here.
+            </p>
       <div className="form-control w-full max-w-xs">
         <label className="label">
           <span className="label-text">Name</span>
@@ -119,7 +119,7 @@ const Register = () => {
             minLength: { value: 5, message: "mis length is 5 characters" },
           })}
           type="text"
-          className="input input-bordered w-full max-w-xs"
+          className="input input-bordered w-full max-w-xs focus:border-0 focus:input-error focus:bg-gray-100 focus:outline-offset-0 rounded-none"
         />
         {errors.name && (
           <span className="text-red-500">{errors.name.message}</span>
@@ -135,24 +135,25 @@ const Register = () => {
             minLength: { value: 10, message: "min length is 10 for email" },
           })}
           type="text"
-          className="input input-bordered w-full max-w-xs"
+          className="input input-bordered w-full max-w-xs focus:border-0 focus:input-error focus:bg-gray-100 focus:outline-offset-0 rounded-none"
         />
         {errors.email && <span className="text-red-500">Email Required</span>}
       </div>
-      {/* password field  */}
-      <div className="form-control w-full max-w-xs">
+
+      <div className="form-control w-full relative max-w-xs">
         <label className="label">
           <span className="label-text">Password</span>
+          <button onClick={()=>eyeButton()} className="lebel-text absolute top-[48px] right-[10px]"><EyeIcon className="w-4 h-4 text-gray-600"></EyeIcon></button>
         </label>
         <input
-          type="password"
+          type={password ? "password" : "text"}
           {...register("password", {
             required: "password is required",
             minLength: { value: 8, message: "minumum 8 characters or longer" },
           })}
-          className="input input-bordered w-full max-w-xs"
+          className="input input-bordered w-full max-w-xs focus:border-0 focus:input-error focus:bg-gray-100 focus:outline-offset-0 rounded-none"
         />
-        {/* {errors.password && <span className="text-red-500">This field is required</span>} */}
+
         {errors.password && (
           <span className="text-red-500">{errors.password.message}</span>
         )}
@@ -162,29 +163,30 @@ const Register = () => {
         <label className="label">
           <span className="label-text">Select Role</span>
         </label>
-        <select defaultValue={'buyer'}
-        {...register("role", {
-        })}
-        className="select input-bordered w-full max-w-xs">
+        <select
+          defaultValue={"buyer"}
+          {...register("role", {})}
+          className="select input-bordered w-full max-w-xs focus:border-0 focus:input-error focus:bg-gray-100 focus:outline-offset-0 rounded-none"
+        >
           <option selected>Buyer</option>
           <option>Seller</option>
         </select>
         {errors.email && <span className="text-red-500">Email Required</span>}
       </div>
-      <button type="submit" className="btn btn-secondary w-full max-w-xs my-5">
+      <button type="submit" className="btn btn-primary w-full max-w-xs mt-10 mb-5">
         Create Account
       </button>
       <div className="form-control w-full max-w-xs">
-        <p>
+        <p className="text-center text-sm">
           Already have an account?
-          <Link to="/login" className="text-secondary block text-center">
-            login your account
+          <Link to="/login" className=" ml-1 label-text-alt link link-hover font-bold">
+            login now
           </Link>
         </p>
-        <div className="divider max-w-xs ">OR</div>
+        <div className="divider max-w-xs text-xs ">OR</div>
         <button
           onClick={handleGoogleLogin}
-          className="btn btn-accent w-full max-w-xs"
+          className="btn btn-secondary btn-outline w-full max-w-xs"
         >
           Continue With Google
         </button>
@@ -192,6 +194,7 @@ const Register = () => {
       {registerError && (
         <p className="text-xl text-red-700 my-5">{registerError}</p>
       )}
+
     </form>
   );
 };

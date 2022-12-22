@@ -1,0 +1,5 @@
+.dashboard::before{
+   content: 'Dashboard';
+   font-size: 14px;
+   color: #df791a;
+}

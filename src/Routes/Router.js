@@ -7,7 +7,6 @@ import AllSeller from "../Pages/Dashboard/AdminDashbord/AllSeller";
 import ReportedItem from "../Pages/Dashboard/AdminDashbord/ReportedItem";
 import BuyerDashboard from "../Pages/Dashboard/BuyerDashboard";
 import MyProducts from "../Pages/Dashboard/MyProducts/MyProducts";
-import MyWishlist from "../Pages/Dashboard/MyWishlist/MyWishlist";
 import Payment from "../Pages/Dashboard/Payment";
 import CatagoryDetails from "../Pages/Home/AllCatagories/CatagoryDetails/CatagoryDetails";
 import Home from "../Pages/Home/Home/Home";
@@ -33,7 +32,7 @@ export const router = createBrowserRouter([
          {
             path:'/catagory/:id',
             element: <PrivateRoute><CatagoryDetails></CatagoryDetails></PrivateRoute>,
-            loader: ({params})=>fetch(`http://localhost:5000/catagory/${params.id}`)
+            loader: ({params})=>fetch(`https://resale-planet-server.vercel.app/catagory/${params.id}`)
          },
          {
             path: '/login',
@@ -60,10 +59,6 @@ export const router = createBrowserRouter([
             element: <BuyerDashboard></BuyerDashboard>
          },
          {
-            path: 'dashboard/my-wishlist',
-            element: <MyWishlist></MyWishlist>
-         },
-         {
             path: 'dashboard/add-product',
             element: <SellerRoute><AddProduct></AddProduct></SellerRoute>
          },
@@ -87,7 +82,7 @@ export const router = createBrowserRouter([
          {
             path: '/dashboard/payment/:id',
             element: <Payment></Payment>,
-            loader: ({params})=>fetch(`http://localhost:5000/dashboard/payment/${params.id}`)
+            loader: ({params})=>fetch(`https://resale-planet-server.vercel.app/dashboard/payment/${params.id}`)
          }
 
       ]

@@ -1,4 +1,3 @@
-import { useQuery } from "@tanstack/react-query";
 import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -8,26 +7,21 @@ import Loader from "../../Loader/Loader";
 
 const AddProduct = () => {
   const [loading, setLoading] = useState(true);
-   const {user} = useContext(AuthContext)
- 
-   const navigate = useNavigate()
+  const { user } = useContext(AuthContext);
 
-   const date = new Date()
-  const time = date.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
-  const current_date =date.getDate()+"-"+(date.getMonth()+1)+"-"+date.getFullYear() ;
+  const navigate = useNavigate();
+
+  const date = new Date();
+  const time = date.toLocaleString("en-US", {
+    hour: "numeric",
+    minute: "numeric",
+    hour12: true,
+  });
+  const current_date =
+    date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear();
   const bookingDate = time + " " + current_date;
 
-  
-   // const navigate = useNavigate()
-   const key = process.env.REACT_APP_imgbb_key;
-//   const { data: specialties = [] } = useQuery({
-//     queryKey: ["specialty"],
-//     queryFn: async () => {
-//       const res = await fetch("http://localhost:5000/appointment-specialty");
-//       const data = await res.json();
-//       return data;
-//     },
-//   });
+  const key = process.env.REACT_APP_imgbb_key;
 
   const {
     register,
@@ -36,22 +30,31 @@ const AddProduct = () => {
   } = useForm();
 
   const handleAddProduct = (data) => {
-   const {name, price, specialty, phone ,location, description, newPrice, used_duration, catagory} = data
-   //  console.log(data.photo[0]);
-   const image = data.photo[0]
-   const formData = new FormData();
-   formData.append('image', image)
-   const url = `https://api.imgbb.com/1/upload?key=${key}`
-   setLoading(false)
-   fetch(url,{
-      method:'POST',
-      body: formData
-   })
-   .then(res=> res.json())
-   .then(result=> {
-     
-      if(result.success){
-         const postData = {
+    const {
+      name,
+      price,
+      specialty,
+      phone,
+      location,
+      description,
+      newPrice,
+      used_duration,
+      catagory,
+    } = data;
+
+    const image = data.photo[0];
+    const formData = new FormData();
+    formData.append("image", image);
+    const url = `https://api.imgbb.com/1/upload?key=${key}`;
+    setLoading(false);
+    fetch(url, {
+      method: "POST",
+      body: formData,
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        if (result.success) {
+          const postData = {
             seller_email: user.email,
             seller_name: user.displayName,
             name,
@@ -64,33 +67,30 @@ const AddProduct = () => {
             newPrice,
             used_duration,
             catagory_id: catagory,
-            post_time: bookingDate 
-         };
-         fetch('http://localhost:5000/dashboard/add-product',{
-            method: 'POST',
-            headers:{
-               'content-type': 'application/json',
-               authorization: `bearer ${localStorage.getItem('token')}`
+            post_time: bookingDate,
+          };
+          fetch("https://resale-planet-server.vercel.app/dashboard/add-product", {
+            method: "POST",
+            headers: {
+              "content-type": "application/json",
+              authorization: `bearer ${localStorage.getItem("token")}`,
             },
-            body: JSON.stringify(postData)
-         }).then(res=>res.json())
-         .then(result => {
-            console.log(result)
-            if(result.acknowledged){
-               toast.success('Product has to be added successfully')
-               setLoading(true);
-               navigate('/dashboard/dashboard/my-products')
-               // navigate('/dashboard/all-doctors')
-
-            }
-         })
-      }
-   })
-
-
+            body: JSON.stringify(postData),
+          })
+            .then((res) => res.json())
+            .then((result) => {
+              console.log(result);
+              if (result.acknowledged) {
+                toast.success("Product has to be added successfully");
+                setLoading(true);
+                navigate("/dashboard/dashboard/my-products");
+              }
+            });
+        }
+      });
   };
-  if(!loading){
-    return <Loader></Loader>
+  if (!loading) {
+    return <Loader></Loader>;
   }
   return (
     <div>
@@ -100,7 +100,6 @@ const AddProduct = () => {
       >
         <h1 className="text-4xl mb-5">Add A New Product</h1>
 
-        
         <div className="form-control w-full max-w-xs">
           <label className="label">
             <span className="label-text">Product Model Name</span>
@@ -132,7 +131,6 @@ const AddProduct = () => {
           )}
         </div>
 
-        
         <div className="form-control w-full max-w-xs">
           <label className="label">
             <span className="label-text">Condition</span>
@@ -141,7 +139,6 @@ const AddProduct = () => {
             {...register("specialty", {
               required: "specialty is required",
             })}
-            
             className="select select-accent w-full max-w-xs"
           >
             <option selected>Excellent</option>
@@ -261,7 +258,7 @@ const AddProduct = () => {
 
         <button
           type="submit"
-          className="btn btn-secondary w-full max-w-xs my-5"
+          className="btn btn-outline btn-warning w-full max-w-xs my-5"
         >
           Add
         </button>

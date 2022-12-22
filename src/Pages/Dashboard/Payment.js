@@ -10,13 +10,15 @@ const Payment = () => {
   const booking = useLoaderData();
   console.log(booking);
   return (
-    <div>
-      <h1>this is payment route {booking.carModel}</h1>
-      <div className="w-96 my-10">
+    <div className="flex justify-center items-center h-[500px] p-10">
+      <div>
+      <h1 className="text-3xl text-center lg:text-start">This is payment route for <span>{booking.carModel}</span></h1>
+      <div className="lg:w-96 my-10">
         <Elements stripe={stripePromise}>
           <CheckoutForm booking={booking} />
         </Elements>
       </div>
+    </div>
     </div>
   );
 };

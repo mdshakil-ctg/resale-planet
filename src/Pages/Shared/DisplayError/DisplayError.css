@@ -1,6 +1,8 @@
-.main{
-   background: url('https://i.ibb.co/YWz35nr/404.jpg');
-   /* background-color: aqua; */
-   height: 100vh;
-
+.main {
+  background: url("https://i.ibb.co/jLkQ4Cv/403.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100%;
+  height: 100vh;
+  max-width: 100%;
 }
