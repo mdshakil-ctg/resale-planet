@@ -8,4 +8,3 @@ This app is also configured for three kind of users, like buyer, seller and admi
 Also use tailwind css and daisyUI components for styles and responsive features.
 To dynamic routes I used the react router for better UI experinces.
 Also many kind of features like auto refetch and many more.
-Thanks for reading......
